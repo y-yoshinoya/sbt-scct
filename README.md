@@ -2,8 +2,6 @@
 
 scct ist auto-installed depending on the scalaVersion of the project.
 
-### WARNING the Jar in the downoads section only works with sbt 0.10.1
-
 #### Commands:
 
 * coverage:compile
