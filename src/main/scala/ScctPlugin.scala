@@ -24,9 +24,9 @@ object ScctPlugin extends Plugin {
 			resolvers += "scct repository" at "http://mtkopone.github.com/scct/maven-repo",
 
 			libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
-				val map = Map("2.9.1" -> "2.9.0-1", "2.9.0-1" -> "2.9.0-1","2.9.0" -> "2.9.0-1", "2.8.1" -> "2.8.0", "2.8.0" -> "2.8.0", "2.7.7" -> "2.7.7")
+        val map = Map("2.9.2" -> "2.9.2", "2.9.1" -> "2.9.1", "2.9.0-1" -> "2.9.0-1", "2.9.0" -> "2.9.0-1", "2.8.1" -> "2.8.0", "2.8.0" -> "2.8.0", "2.7.7" -> "2.7.7")
 				val scctVersion = map.getOrElse(sv, error("Unsupported Scala version " + sv))
-				deps :+ "reaktor" % ("scct_" + scctVersion) % "0.1-SNAPSHOT" % "coverage"
+				deps :+ "reaktor" % ("scct_" + scctVersion) % "0.2-SNAPSHOT" % "coverage"
 			},
 			/* adding scct as a dependency */
 
@@ -43,6 +43,20 @@ object ScctPlugin extends Plugin {
 
 			/* modifying tasks */
 			TaskKey[Unit]("test") in Coverage <<= (TaskKey[Unit]("test") in CoverageTest).dependsOn(compile in Coverage),
+
+      compile in Coverage <<= { (classDirectory in Compile, classDirectory in Coverage, classDirectory in Test, compile in Coverage) map {
+        (compile, coverage, test, originalTask) =>
+        def relativeFiles(f: java.io.File) = {
+          val l = f.getPath.size
+          (f ** "*").get.map(_.getPath.drop(l))
+        }
+
+        val (l1, l2) = (compile.getPath.size, coverage.getPath.size)
+        (relativeFiles(compile).toSet -- relativeFiles(coverage) -- relativeFiles(test)).foreach { f =>
+          IO.copyDirectory(compile / f, coverage / f, true)
+        }
+        originalTask
+      }},
 
 			docDirectory in Coverage <<= crossTarget / "coverage-report",
 

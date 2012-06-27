@@ -1,4 +1,4 @@
-#### This is a sbt 0.10.x plugin for [scct](http://mtkopone.github.com/scct/) the scala code coverage tool.
+#### This is a sbt 0.11.3 plugin for [scct](http://mtkopone.github.com/scct/) the scala code coverage tool.
 
 scct ist auto-installed depending on the scalaVersion of the project.
 
@@ -18,11 +18,11 @@ docDirectory is reused for the coverage report directory
 
 1. retrive the sources from github:
 
-	git clone git@github.com:dvc94ch/sbt-scct.git
+	git clone git@github.com:y-yoshinoya/sbt-scct.git
 
 2. set sbt version in sbt-scct/project/build.properties:
 
-	sbt.version=0.10.1
+	sbt.version=0.11.3
 
 3. publish plugin:
 
