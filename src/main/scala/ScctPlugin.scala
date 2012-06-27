@@ -44,7 +44,7 @@ object ScctPlugin extends Plugin {
 			/* modifying tasks */
 			TaskKey[Unit]("test") in Coverage <<= (TaskKey[Unit]("test") in CoverageTest).dependsOn(compile in Coverage),
 
-      compile in Coverage <<= { (classDirectory in Compile, classDirectory in Coverage, classDirectory in Test, compile in Coverage) map {
+      compile in CoverageTest <<= { (classDirectory in Compile, classDirectory in Coverage, classDirectory in Test, compile in CoverageTest) map {
         (compile, coverage, test, originalTask) =>
         def relativeFiles(f: java.io.File) = {
           val l = f.getPath.size
